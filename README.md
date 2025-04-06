@@ -12,7 +12,7 @@ This is a package for training neural free energy functionals for Classical Dens
 3. In `config.py`, update the following paths:
    ```python
    local_checkpoint_path: str = "path/to/where/you/want/the/models/to/be/saved/"
-   local_dataset_path: str = "/path/to/dataset/"
+   local_dataset_path: str = "/path/to/datasets/" # these are rho_dataset and c2_dataset, included under /datasets/ in this repository.
    local_datasplit_path: str = "/path/to/package/cdft_1d_package/data_split/"
    ```
 4. Run the training script:
