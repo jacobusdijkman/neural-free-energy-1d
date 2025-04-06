@@ -1,5 +1,7 @@
 # Neural Free Energy Functionals Package
 
+![DFT Visualization](DFT.gif)
+
 This is a package for training neural free energy functionals for Classical Density Functional Theory.
 
 ## Getting Started
