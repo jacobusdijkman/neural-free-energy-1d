@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cdft_1d_package"
+version = "0.1"
+description = "Development package for 1D cDFT"
+dependencies = [
+    "torch",
+    "torchvision",
+    "torchaudio",
+    "lightning",
+    "wandb",
+    "matplotlib",
+]
+
+[tool.setuptools]
+packages = ["cdft_1d_package"]

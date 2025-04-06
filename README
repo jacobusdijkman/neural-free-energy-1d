@@ -1,0 +1,13 @@
+1. activate venv/conda environment
+2. in the parent directory 1d-neural-free-energy-training, run: pip install .
+3. in config.py change these paths:
+    local_checkpoint_path: str = (
+        "path/to/where/you/want/the/models/to/be/saved/"
+    )
+    local_dataset_path: str = (
+        "/path/to/dataset/"
+    )
+    local_datasplit_path: str = (
+        "/path/to/package/cdft_1d_package/data_split/"
+    )
+4. python train_*.py 
