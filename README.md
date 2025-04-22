@@ -2,7 +2,7 @@
 
 ![DFT Visualization](DFT.gif)
 
-This is a package for training neural free energy functionals for Classical Density Functional Theory.
+This is a package for training Neural Free Energy Functionals for Classical Density Functional Theory.
 
 ## Getting Started
 
@@ -15,7 +15,7 @@ This is a package for training neural free energy functionals for Classical Dens
    ```python
    local_checkpoint_path: str = "path/to/where/you/want/the/models/to/be/saved/"
    local_dataset_path: str = "/path/to/datasets/" # these are rho_dataset and c2_dataset, included under /datasets/ in this repository.
-   local_datasplit_path: str = "/path/to/package/cdft_1d_package/data_split/"
+   local_datasplit_path: str = "/path/to/package/cdft_1d_package/data_split/" # these are f1_train_files.txt and f1_val_files.txt included in /1d_cdft_package/data_split/ in this repository.
    ```
 4. Run the training script:
    ```bash
