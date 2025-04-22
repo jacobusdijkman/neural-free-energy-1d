@@ -10,7 +10,7 @@ class DataConfig:
     val_dataset: Optional[str] = None
     input_size: List[int] = field(default_factory=lambda: [1000])
     cutoff: float = 1e-3
-    dz: float = 1 / 100
+    dz: float = 1 / 100  # the current cnn with default c_hidden assumes L=10 and dz=1/100. Changing this means changing the cnn hparams. 
 
 @dataclass
 class IDConfig:
@@ -47,7 +47,6 @@ class TrainerConfig:
 @dataclass
 class ModelConfig:
     c_hidden: List[int] = field(default_factory=lambda: [32,32,32,32,64,64,64,64])
-    downsampling_kernel_size: int = 3
     kernel_size: int = 3
     dilation: int = 3
     stride: int = 1
@@ -70,13 +69,13 @@ class PathsConfig:
         project_root = self.find_project_root()
         
         if not self.local_checkpoint_path:
-            self.local_checkpoint_path = os.path.join(project_root, "logs")
+            self.local_checkpoint_path = os.path.join(project_root, "logs/")
         
         if not self.local_dataset_path:
-            self.local_dataset_path = os.path.join(project_root, "datasets")
+            self.local_dataset_path = os.path.join(project_root, "datasets/")
         
         if not self.local_datasplit_path:
-            self.local_datasplit_path = os.path.join(project_root, "data_split")
+            self.local_datasplit_path = os.path.join(project_root, "data_split/")
 
     def find_project_root(self):
         """

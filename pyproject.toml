@@ -9,6 +9,7 @@ description = "Development package for 1D cDFT"
 dependencies = [
     "torch",
     "torchvision",
+    "scipy",
     "torchaudio",
     "lightning",
     "wandb",

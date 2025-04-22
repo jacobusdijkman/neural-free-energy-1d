@@ -54,8 +54,9 @@ if __name__ == "__main__":
                                        "d2F" : log_d2F},
                     ), 
                     data=DataConfig(
-                        train_dataset="rho_dataset",
-                        val_dataset="c2_dataset",
+                        train_dataset="c2_dataset",
+                        val_dataset="rho_dataset",
+                        dz=1/100
                     ),
     )
 

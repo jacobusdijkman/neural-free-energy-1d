@@ -2,8 +2,10 @@ import os
 import numpy as np
 from torch.utils.data import Dataset
 from cdft_1d_package.utils.data_split import load_train_val_split 
+from scipy.interpolate import interp1d
+import matplotlib.pyplot as plt
 
-def load_data(files, path, cutoff):
+def load_data(files, path, cutoff, dz):
 
     rho_list = []
     Vext_list = []
@@ -21,6 +23,11 @@ def load_data(files, path, cutoff):
         dF_drho = np.zeros_like(rho, dtype='float32')
         dF_drho[rho>cutoff] = (mu - V_ext[rho>cutoff] - np.log(rho[rho>cutoff])) 
 
+        if dz != 1/100:
+            rho = convert_dz(rho, dz=dz, L=10)
+            V_ext = convert_dz(V_ext, dz=dz, L=10)
+            dF_drho = convert_dz(dF_drho, dz=dz, L=10)
+
         rho_list.append(rho)
         dF_drho_list.append(dF_drho)
         Vext_list.append(V_ext)
@@ -29,6 +36,14 @@ def load_data(files, path, cutoff):
 
     return rho_list, Vext_list, epsilon_list, mu_list, dF_drho_list
 
+def convert_dz(data, dz=1/100, L=10):
+
+    z_values = np.linspace(0, L, len(data))
+    data_interp = interp1d(z_values, data, kind='linear', bounds_error=False, fill_value=0.0)
+    recast_z_values = np.arange(0, L, dz)
+    recast_data = data_interp(recast_z_values).astype(np.float32)
+    return recast_data
+
 def get_datasets(config, val_only=False, jax=False):
 
     train_files, val_files = load_train_val_split(config.paths.datasplit_path, id="f1")
@@ -36,8 +51,8 @@ def get_datasets(config, val_only=False, jax=False):
     if not val_only:
         assert config.paths.train_path == config.paths.val_path, "train_path and val_path must be the same for F1"
 
-    train_set = cDFTDataset(train_files, config.paths.val_path, cutoff=config.data.cutoff, jax=jax)
-    val_set = cDFTDataset(val_files, config.paths.val_path, cutoff=config.data.cutoff, jax=jax)
+    train_set = cDFTDataset(train_files, config.paths.val_path, cutoff=config.data.cutoff, dz=config.data.dz, jax=jax)
+    val_set = cDFTDataset(val_files, config.paths.val_path, cutoff=config.data.cutoff, dz=config.data.dz, jax=jax)
 
     if val_only:
         return val_set
@@ -52,8 +67,8 @@ def get_complete_dataset(dataset_path):
     return complete_set
 
 class cDFTDataset(Dataset):
-    def __init__(self, set_idx, dataset_path, cutoff, jax=False):
-        self.densities, self.Vexts, self.epsilons, self.mus, self.dF_drhos = load_data(set_idx, path=dataset_path, cutoff=cutoff)
+    def __init__(self, set_idx, dataset_path, cutoff, dz, jax=False):
+        self.densities, self.Vexts, self.epsilons, self.mus, self.dF_drhos = load_data(set_idx, path=dataset_path, cutoff=cutoff, dz=dz)
         self.channel_dim = -1 if jax else 0
 
     def __len__(self):

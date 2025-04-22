@@ -26,7 +26,8 @@ if __name__ == "__main__":
                     ), 
                     data=DataConfig(
                         train_dataset="rho_dataset",
-                        val_dataset="rho_dataset"
+                        val_dataset="rho_dataset",
+                        dz=1/100,
                     )
     )
 

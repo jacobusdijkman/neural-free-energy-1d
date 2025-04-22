@@ -4,7 +4,7 @@ from torch.utils.data import Dataset
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
 
-def load_data(files, path):
+def load_data(files, path, dz):
 
     rho_list = []
     mu_list = []
@@ -20,7 +20,7 @@ def load_data(files, path):
         dF_drho = np.load(f"{path}/dF_drho_"+str(i)+".npy")
         z_values = np.load(f"{path}/r_values_"+str(i)+".npy")
         
-        recast_c2, recast_z_values = convert_dr(c2, z_values)
+        recast_c2, recast_z_values = convert_dz(c2, z_values, dz)
         c2 = expand_c2(recast_c2)
 
         rho_list.append(rho_b)
@@ -41,7 +41,7 @@ def expand_c2(c_z):
 
     return c2
 
-def convert_dr(c2, r_values, dz=1/100, R=5):
+def convert_dz(c2, r_values, dz=1/100, R=5):
 
     c2_interp = interp1d(r_values, c2, kind='linear', bounds_error=False, fill_value=0.0)
     recast_r_values = np.arange(0, R, dz)
@@ -51,13 +51,13 @@ def convert_dr(c2, r_values, dz=1/100, R=5):
 def get_complete_dataset(config, jax=False):
 
     file_nrs = np.array([int(f.split('_')[-1][:-4]) for f in os.listdir(config.paths.train_path) if f.startswith("rhob_")])
-    complete_set = cDFTDataset(file_nrs, config.paths.train_path, config.data.input_size, n_samples=config.trainer.d2F_samples, jax=jax)
+    complete_set = cDFTDataset(file_nrs, config.paths.train_path, config.data.input_size, n_samples=config.trainer.d2F_samples, dz=config.data.dz, jax=jax)
 
     return complete_set
 
 class cDFTDataset(Dataset):
-    def __init__(self, set_idx, dataset_path, input_size, n_samples, jax=False):
-        self.densities, self.mus, self.dF_drhos, self.c2s = load_data(set_idx, path=dataset_path)
+    def __init__(self, set_idx, dataset_path, input_size, n_samples, dz, jax=False):
+        self.densities, self.mus, self.dF_drhos, self.c2s = load_data(set_idx, path=dataset_path, dz=dz)
         self.input_size = input_size
         self.n_samples = n_samples
         self.channel_dim = -1 if jax else 0
