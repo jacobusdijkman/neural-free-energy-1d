@@ -58,18 +58,49 @@ class ModelConfig:
 
 @dataclass
 class PathsConfig:
-    local_checkpoint_path: str = (
-        "path/to/where/you/want/the/models/to/be/saved/"
-    )
-    local_dataset_path: str = (
-        "/path/to/dataset/"
-    )
-    local_datasplit_path: str = (
-        "/path/to/package/cdft_1d_package/data_split/"
-    )
+    local_checkpoint_path: str = field(default="")
+    local_dataset_path: str = field(default="")
+    local_datasplit_path: str = field(default="")
     train_path: str = "set in set_paths()"
     val_path: str = "set in set_paths()"
     train_script_path: str = field(default_factory=lambda: os.getcwd())
+
+    def __post_init__(self):
+        """Initialize paths based on project root."""
+        project_root = self.find_project_root()
+        
+        if not self.local_checkpoint_path:
+            self.local_checkpoint_path = os.path.join(project_root, "logs")
+        
+        if not self.local_dataset_path:
+            self.local_dataset_path = os.path.join(project_root, "datasets")
+        
+        if not self.local_datasplit_path:
+            self.local_datasplit_path = os.path.join(project_root, "data_split")
+
+    def find_project_root(self):
+        """
+        Find the project root directory (neural-free-energy-1d).
+        """
+        current_dir = os.getcwd()
+        
+        # Walk up the directory tree to find the project root
+        path = current_dir
+        while path != '/' and path != '':  # Added empty string check for Windows
+            # Check if this is the neural-free-energy-1d directory
+            if os.path.basename(path) == 'neural-free-energy-1d':
+                return path
+                
+            # Also check if there's a neural-free-energy-1d directory in the current path
+            nfe_dir = os.path.join(path, "neural-free-energy-1d")
+            if os.path.exists(nfe_dir):
+                return nfe_dir
+            
+            # Move up one directory
+            path = os.path.dirname(path)
+        
+        # If we can't find the project root, use the current directory
+        return current_dir
 
     def to_dict(self):
         return asdict(self)
