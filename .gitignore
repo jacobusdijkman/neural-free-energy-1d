@@ -178,4 +178,5 @@ cython_debug/
 # directories not to include
 c2_dataset
 rho_dataset
-logs/
+datasets/*
+logs/*

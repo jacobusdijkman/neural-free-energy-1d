@@ -15,10 +15,9 @@ def debugger_is_active() -> bool:
 
 def set_paths(config):
 
-    config.paths.checkpoint_path = config.paths.local_checkpoint_path
-    config.paths.train_path = config.paths.local_dataset_path + config.data.train_dataset
-    config.paths.val_path = config.paths.local_dataset_path + config.data.val_dataset
-    config.paths.datasplit_path = config.paths.local_datasplit_path
+    config.paths.train_path = config.paths.dataset_path + config.data.train_dataset
+    config.paths.val_path = config.paths.dataset_path + config.data.val_dataset
+    config.paths.datasplit_path = config.paths.datasplit_path
     os.makedirs(config.paths.checkpoint_path, exist_ok=True)
 
 def set_wandb(config):
