@@ -54,24 +54,21 @@ def set_trainer(wandb_logger, config):
     
     return trainer
 
-def get_dataloaders(train_set, val_set, config, collate_fn=None):
-
-    data_generator = torch.Generator().manual_seed(config.trainer.data_seed) # the random number generator of the data loader
+def get_dataloaders(train_set, val_set, config):
 
     train_loader = data.DataLoader(train_set, 
-                                   batch_size=config.trainer.batch_size, 
-                                   shuffle=True, 
-                                   drop_last=True, 
-                                   pin_memory=False, 
-                                   num_workers = 0, 
-                                   generator=data_generator,
-                                   collate_fn=collate_fn)
+                                    batch_size=config.trainer.batch_size, 
+                                    persistent_workers=True,
+                                    shuffle=True, 
+                                    drop_last=True, 
+                                    pin_memory=False, 
+                                    num_workers = 4)
     val_loader = data.DataLoader(val_set, 
-                                 batch_size=1, 
-                                 shuffle=False, 
-                                 drop_last=False, 
-                                 num_workers = 0,
-                                 collate_fn=collate_fn,) 
+                                    batch_size=1, 
+                                    persistent_workers=True,
+                                    shuffle=False, 
+                                    drop_last=False, 
+                                    num_workers = 4) 
 
     return train_loader, val_loader
 

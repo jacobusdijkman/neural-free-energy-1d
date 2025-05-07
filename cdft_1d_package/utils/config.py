@@ -36,7 +36,7 @@ class TrainerConfig:
     max_epochs: int = 100000
     num_train_workers : int = 8
     num_val_workers : int = 8
-    matmul_precision: str = "medium"
+    matmul_precision: str = "highest"
     log_functions: Dict[str, Callable] = field(default_factory=lambda: {"dF": log_dF})
     viz: List[str] = field(default_factory=lambda: [])  # "gradients", "activations", "weights"
     debugger_active: bool = field(default_factory=debugger_is_active)
