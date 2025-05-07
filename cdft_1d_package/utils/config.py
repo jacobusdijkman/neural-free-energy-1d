@@ -57,9 +57,9 @@ class ModelConfig:
 
 @dataclass
 class PathsConfig:
-    local_checkpoint_path: str = field(default="")
-    local_dataset_path: str = field(default="")
-    local_datasplit_path: str = field(default="")
+    checkpoint_path: str = field(default="")
+    dataset_path: str = field(default="")
+    datasplit_path: str = field(default="")
     train_path: str = "set in set_paths()"
     val_path: str = "set in set_paths()"
     train_script_path: str = field(default_factory=lambda: os.getcwd())
@@ -68,14 +68,14 @@ class PathsConfig:
         """Initialize paths based on project root."""
         project_root = self.find_project_root()
         
-        if not self.local_checkpoint_path:
-            self.local_checkpoint_path = os.path.join(project_root, "logs/")
+        if not self.checkpoint_path:
+            self.checkpoint_path = os.path.join(project_root, "logs/")
         
-        if not self.local_dataset_path:
-            self.local_dataset_path = os.path.join(project_root, "datasets/")
+        if not self.dataset_path:
+            self.dataset_path = os.path.join(project_root, "datasets/")
         
-        if not self.local_datasplit_path:
-            self.local_datasplit_path = os.path.join(project_root, "data_split/")
+        if not self.datasplit_path:
+            self.datasplit_path = os.path.join(project_root, "data_split/")
 
     def find_project_root(self):
         """
