@@ -45,13 +45,14 @@ if __name__ == "__main__":
 
     """Training a neural free energy using pair-correlation matching."""
     
-    config = Config(id=IDConfig(project_name="neural_free_energy_experiments", 
+    config = Config(id=IDConfig(project_name="1D_Vext_Experiments", 
                                 run_name="f2_cnn",
                                 note="<note>"), 
                     trainer=TrainerConfig(
                         check_val_every_n_epoch=10,
                         log_functions={"dF" : log_dF,
                                        "d2F" : log_d2F},
+                        seed=12
                     ), 
                     data=DataConfig(
                         train_dataset="c2_dataset",

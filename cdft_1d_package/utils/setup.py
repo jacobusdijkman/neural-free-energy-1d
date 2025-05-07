@@ -77,7 +77,7 @@ def setup(config):
         print("-- Debugger is active ---")
 
     torch.set_float32_matmul_precision(config.trainer.matmul_precision)
-    pl.seed_everything(config.trainer.trainer_seed) 
+    pl.seed_everything(config.trainer.seed) 
 
     set_paths(config)
     wandb_logger = set_wandb(config)

@@ -21,8 +21,7 @@ class IDConfig:
 
 @dataclass
 class TrainerConfig:
-    trainer_seed: int = 44
-    data_seed: int = 44
+    seed: int = 44
     batch_size: int = 32
     accumulate_batch_size: int = 32
     optimizer_name: str = "Adam"
